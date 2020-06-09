@@ -9,7 +9,7 @@ namespace {
 int main() {
 
 	tp::ThreadPool threadPool(5);
-	
+
 	for (int i = 0; i < 10; i++) {
 		threadPool.EncuqueJob([]() {
 			for (int i = 0; i < 10; i++) {
@@ -18,7 +18,8 @@ int main() {
 				std::cout << ss.str();
 				std::this_thread::sleep_for(std::chrono::duration<double>(2));
 			}
-			});
+			}
+		);
 	}
 
 	std::stringstream ss;
