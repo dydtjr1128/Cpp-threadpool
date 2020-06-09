@@ -1,6 +1,7 @@
 #ifndef THREADPOOL_H
 #define THREADPOOL_H
 
+#include <atomic>
 #include <condition_variable>
 #include <mutex>
 #include <functional>
@@ -14,17 +15,22 @@ namespace thread::threadpool {
 		explicit ThreadPool(size_t threadCount);
 		~ThreadPool();
 
+		void EncuqueJob(std::function<void()> func);
+
+		void shutDown();
+		int getAllThreadCount();
+		int getRunningJobCount();
 	private:
 		void WorkerThread();
-		void Job();
 
-		std::queue<std::function<void()>> jobs_;
-		std::vector<std::thread> worker_threads_;
+		std::queue<std::function<void()>> jobs_; // job array
+		std::vector<std::thread> worker_threads_; // thread array
 		std::mutex mutex_;
 		std::condition_variable cv_;
 
 		size_t threadCount_;
-		bool stop_all;
+		bool stop_all_;
+		std::atomic<int> jobCount_;
 	};
 }
 
